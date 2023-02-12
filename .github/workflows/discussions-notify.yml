@@ -9,10 +9,10 @@ jobs:
     if: github.event.discussion && !github.event.comment
     steps:
       - run: |
-          curl -X POST -d '{ "text": "Created New Discussion: @shimato-.shimada @rasshiine.shirane @asari.asahina Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST -d '{"mention": "U03SFNV3H4N", "text": "Created New Discussion: By: ${{ github.event.discussion.author }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
   discussion_commented:
     runs-on: ubuntu-latest
     if: github.event.discussion && github.event.comment
     steps:
       - run: |
-          curl -X POST -d '{ "text": "Created discussion comment: ${{ github.event.comment.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST -d '{ "text": "Created New Discussion: By: ${{ github.event.discussion.author }}  Body: ${{ github.event.comment.body }} URL: ${{  github.event.comment.html_url }}"" }' ${{ secrets.SLACK_WEBHOOK_URL }}
