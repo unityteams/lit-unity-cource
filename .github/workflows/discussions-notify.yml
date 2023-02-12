@@ -1,6 +1,6 @@
 on:
   discussion:
-    types: [created]
+    types: [created,answered,unanswered]
   discussion_comment:
     types: [created]
 jobs:
@@ -9,7 +9,7 @@ jobs:
     if: github.event.discussion && !github.event.comment
     steps:
       - run: |
-          curl -X POST -d '{ "text": "Created discussion: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST -d '{ "text": "Created New Discussion: @shimato-.shimada @rasshiine.shirane @asari.asahina Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
   discussion_commented:
     runs-on: ubuntu-latest
     if: github.event.discussion && github.event.comment
