@@ -6,7 +6,7 @@ on:
 jobs:
   discussion_answered:
     runs-on: ubuntu-latest
-    if: github.event.discussion && ${{ github.event.action == "created" }}
+    if: github.event.discussion && ${{ github.event.action == created }}
     steps:
       - run: |
           curl -X POST -d '{"text": "Answered Discussion: By: ${{ github.event.sender.login }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
