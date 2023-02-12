@@ -1,6 +1,6 @@
 on:
   discussion:
-    types: [created,answered,unanswered]
+    types: [created,answered]
   discussion_comment:
     types: [created]
 jobs:
@@ -9,16 +9,16 @@ jobs:
     if: github.event.discussion && github.event.answered
     steps:
       - run: |
-          curl -X POST -d '{"text": "Answered Discussion: By: ${{ github.event.sender }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
-  discussion_created:
+          curl -X POST -d '{"text": "Answered Discussion: By: ${{ github.event.sender.name }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
+  discussion_question_created:
     runs-on: ubuntu-latest
-    if: github.event.discussion && !github.event.comment
+    if: github.event.discussion && !github.event.comment && (github.event.discussion.category=="質問")
     steps:
       - run: |
-          curl -X POST -d '{"text": "<!channel> Created New Discussion: By: ${{ github.event.sender }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST -d '{"text": "<!channel> Created New Question: By: ${{ github.event.sender.name }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
   discussion_commented:
     runs-on: ubuntu-latest
     if: github.event.discussion && github.event.comment
     steps:
       - run: |
-          curl -X POST -d '{ "text": "Added New Comment: By: ${{ github.event.sender }} Title: ${{ github.event.discussion.title }} Body: ${{ github.event.comment.body }} URL: ${{  github.event.comment.html_url }}"" }' ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST -d '{ "text": "<!channel>　Added New Comment: By: ${{ github.event.sender.name }} Title: ${{ github.event.discussion.title }} Body: ${{ github.event.comment.body }} URL: ${{  github.event.comment.html_url }}"" }' ${{ secrets.SLACK_WEBHOOK_URL }}
