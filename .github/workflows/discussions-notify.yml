@@ -17,7 +17,7 @@ jobs:
     if: github.event.discussion && !github.event.comment
     steps:
       - run: |
-          curl -X POST -d '{"text": "<!channel> Created New Question: ${{ github.event.discussion.category.id }} By: ${{ github.event.sender.name }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST -d '{"text": "<!channel> Created New Question: ${{ github.event.discussion.category.name }} By: ${{ github.event.sender.login }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
   discussion_commented:
     runs-on: ubuntu-latest
     if: github.event.discussion && github.event.comment
