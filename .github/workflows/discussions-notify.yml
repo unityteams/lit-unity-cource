@@ -4,15 +4,21 @@ on:
   discussion_comment:
     types: [created]
 jobs:
+  discussion_answered:
+    runs-on: ubuntu-latest
+    if: github.event.discussion && github.event.answered
+    steps:
+      - run: |
+          curl -X POST -d '{"text": "Answered Discussion: By: ${{ github.event.sender }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
   discussion_created:
     runs-on: ubuntu-latest
     if: github.event.discussion && !github.event.comment
     steps:
       - run: |
-          curl -X POST -d '{"text": "<@U03SFNV3H4N> Created New Discussion: By: ${{ github.event.author }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST -d '{"text": "<!channel> Created New Discussion: By: ${{ github.event.sender }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
   discussion_commented:
     runs-on: ubuntu-latest
     if: github.event.discussion && github.event.comment
     steps:
       - run: |
-          curl -X POST -d '{ "text": "Created New Discussion: By: ${{ github.event.author }}  Body: ${{ github.event.comment.body }} URL: ${{  github.event.comment.html_url }}"" }' ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST -d '{ "text": "Added New Comment: By: ${{ github.event.sender }} Title: ${{ github.event.discussion.title }} Body: ${{ github.event.comment.body }} URL: ${{  github.event.comment.html_url }}"" }' ${{ secrets.SLACK_WEBHOOK_URL }}
