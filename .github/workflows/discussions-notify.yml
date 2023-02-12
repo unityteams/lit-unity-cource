@@ -4,7 +4,7 @@ on:
   discussion_comment:
     types: [created]
 env:
-  category_question: "質問"
+  category_question_id: 0
 jobs:
   discussion_answered:
     runs-on: ubuntu-latest
@@ -14,7 +14,7 @@ jobs:
           curl -X POST -d '{"text": "Answered Discussion: By: ${{ github.event.sender.name }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
   discussion_question_created:
     runs-on: ubuntu-latest
-    if: github.event.discussion && !github.event.comment && github.event.discussion.category.name == env.category_question
+    if: github.event.discussion && !github.event.comment && github.event.discussion.category.id == env.category_question_id
     steps:
       - run: |
           curl -X POST -d '{"text": "<!channel> Created New Question: By: ${{ github.event.sender.name }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
