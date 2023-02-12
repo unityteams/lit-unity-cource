@@ -6,10 +6,10 @@ on:
 jobs:
   discussion_answered:
     runs-on: ubuntu-latest
-    if: github.event.discussion && github.event.discussion.answered
+    if: github.event.discussion
     steps:
       - run: |
-          curl -X POST -d '{"text": "Answered Discussion: By: ${{ github.event.sender.login }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
+          curl -X POST -d '{"text": "Answered Discussion: ${{ github.event.discussion.action }} By: ${{ github.event.sender.login }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
   discussion_question_created:
     runs-on: ubuntu-latest
     if: github.event.discussion.created
