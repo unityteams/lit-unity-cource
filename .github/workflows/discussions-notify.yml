@@ -6,19 +6,19 @@ on:
 jobs:
   discussion_answered:
     runs-on: ubuntu-latest
-    if: github.event.discussion && github.event.answered
+    if: github.event.discussion && github.event.discussion.answered
     steps:
       - run: |
           curl -X POST -d '{"text": "Answered Discussion: By: ${{ github.event.sender.login }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
   discussion_question_created:
     runs-on: ubuntu-latest
-    if: github.event.discussion && !github.event.comment
+    if: github.event.discussion.created
     steps:
       - run: |
           curl -X POST -d '{"text": "<!channel> Created New Discussion(${{ github.event.discussion.category.name }}): By: ${{ github.event.sender.login }} Title: ${{ github.event.discussion.title }} URL: ${{ github.event.discussion.html_url }}" }' ${{ secrets.SLACK_WEBHOOK_URL }}
   discussion_commented:
     runs-on: ubuntu-latest
-    if: github.event.discussion && github.event.comment
+    if: github.event.discussion_comment.created
     steps:
       - run: |
           curl -X POST -d '{ "text": "<!channel>　Added New Comment: By: ${{ github.event.sender.name }} Title: ${{ github.event.discussion.title }} Body: ${{ github.event.comment.body }} URL: ${{  github.event.comment.html_url }}"" }' ${{ secrets.SLACK_WEBHOOK_URL }}
